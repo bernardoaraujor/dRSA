@@ -64,3 +64,6 @@ if(TEST)
 	target_link_libraries(rand dopenssl crypto)
 	target_link_libraries(rsa dopenssl crypto)
 endif()
+
+install(TARGETS dopenssl DESTINATION lib)
+install(FILES ${HEADER_FILES} DESTINATION include)
