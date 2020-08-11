@@ -9,24 +9,38 @@ enable_testing()
 
 option(TEST "Enable tests" OFF)
 
-set(SRC_DIR "src/dopenssl")
+## ------------------------------------------------------------------------------------------------
+## fetch ExternalProjects
 
-set(HEADER_FILES
-	${SRC_DIR}/all.h
-	${SRC_DIR}/bn.h
-	${SRC_DIR}/rand.h
-	${SRC_DIR}/rsa.h
+include(FetchContent)
+FetchContent_Declare(
+		iota_common
+		GIT_REPOSITORY http://github.com/iotaledger/iota_common.git
+		GIT_TAG cf649803757abf48432d4fa60e9f27ac119bae5f
 )
 
-include_directories(${SRC_DIR}/..)
+message(STATUS "Fetching iota_common")
+FetchContent_MakeAvailable(iota_common)
+## ------------------------------------------------------------------------------------------------
+## set dopenssl lib properties
+set(DOPENSSL_SRC_DIR "src/dopenssl")
 
-set(SRC_FILES
-	${SRC_DIR}/bn.c
-	${SRC_DIR}/rand.c
-	${SRC_DIR}/rsa.c
+set(DOPENSSL_HEADERS
+	${DOPENSSL_SRC_DIR}/all.h
+	${DOPENSSL_SRC_DIR}/bn.h
+	${DOPENSSL_SRC_DIR}/rand.h
+	${DOPENSSL_SRC_DIR}/rsa.h
 )
 
-add_library(dopenssl STATIC ${SRC_FILES})
+include_directories(${DOPENSSL_SRC_DIR}/..)
+
+set(DOPENSSL_SRC
+	${DOPENSSL_SRC_DIR}/bn.c
+	${DOPENSSL_SRC_DIR}/rand.c
+	${DOPENSSL_SRC_DIR}/rsa.c
+)
+
+add_library(dopenssl STATIC ${DOPENSSL_SRC})
 
 find_package(OpenSSL)
 if (OPENSSL_FOUND)
@@ -36,8 +50,11 @@ endif (OPENSSL_FOUND)
 
 set_target_properties(dopenssl PROPERTIES OUTPUT_NAME "dopenssl")
 target_include_directories(dopenssl PUBLIC
-	${SRC_DIR}
+	${DOPENSSL_SRC_DIR}
 )
+
+install(TARGETS dopenssl DESTINATION lib)
+install(FILES ${DOPENSSL_HEADERS} DESTINATION include/dopenssl)
 
 if(TEST)
 	set(TEST_DIR "tests/dopenssl")
@@ -53,12 +70,43 @@ if(TEST)
 	target_link_libraries(rand_test dopenssl crypto)
 	target_link_libraries(rsa_test dopenssl crypto)
 endif()
+## ------------------------------------------------------------------------------------------------
+## set iota2rsa lib properties
+set(IOTA2RSA_SRC_DIR "src/iota2rsa")
+set(IOTA2RSA_HEADERS ${IOTA2RSA_SRC_DIR}/iota2rsa.h)
 
-install(TARGETS dopenssl DESTINATION lib)
-install(FILES ${HEADER_FILES} DESTINATION include/dopenssl)
+include_directories(${IOTA2RSA_SRC_DIR}/..)
 
-add_executable(dopenssl_sample src/sample.c)
-target_include_directories(dopenssl_sample PUBLIC ${HEADER_FILES})
-target_link_libraries(dopenssl_sample PUBLIC dopenssl)
+set(IOTA2RSA_SRC ${IOTA2RSA_SRC_DIR}/iota2rsa.c)
 
-install(TARGETS dopenssl_sample DESTINATION bin)
+add_library(iota2rsa STATIC ${IOTA2RSA_SRC})
+target_include_directories(iota2rsa PUBLIC ${IOTA2RSA_SRC_DIR} ${iota_common_SOURCE_DIR})
+
+install(TARGETS iota2rsa DESTINATION lib)
+install(FILES ${IOTA2RSA_HEADERS} DESTINATION include/iota2rsa)
+
+## ------------------------------------------------------------------------------------------------
+## set iota2rsa_sample executable properties
+add_executable(iota2rsa_sample src/sample.c)
+
+set(SAMPLE_INCLUDE_DIRS
+	${iota_common_SOURCE_DIR}
+)
+
+target_include_directories(iota2rsa_sample PUBLIC ${SAMPLE_INCLUDE_DIRS})
+
+set(SAMPLE_LINK_DIRS
+	${CMAKE_INSTALL_PREFIX}/lib
+	${iota_common_BUILD_DIR}
+)
+
+target_link_directories(iota2rsa_sample PUBLIC ${SAMPLE_LINK_DIRS})
+
+set(SAMPLE_LINK_LIBS
+	dopenssl
+	iota2rsa
+	common # iota_common
+)
+target_link_libraries(iota2rsa_sample PUBLIC ${SAMPLE_LINK_LIBS})
+
+install(TARGETS iota2rsa_sample DESTINATION bin)

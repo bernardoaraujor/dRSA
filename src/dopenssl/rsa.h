@@ -21,7 +21,7 @@ RSA *dRSA_deduce_publickey(BIGNUM *N,
 /* Deduce the whole private key _rsa_ of the given size in _bits_ by relying on
    a deterministic PNRG seeded with the content provided. */
 RSA *dRSA_deduce_privatekey(int bits,
-                            const unsigned char *seed, size_t seed_length);
+                            const unsigned char *seed);
 /* Compare the public part of the two given RSA keys. */
 int dRSA_cmp_publickey(RSA *a, RSA *b);
 /* Compare the private part of the two given RSA keys. */

@@ -89,8 +89,9 @@ RSA *dRSA_deduce_publickey(BIGNUM *N,
 }
 
 RSA *dRSA_deduce_privatekey(int bits,
-                            const unsigned char *seed, size_t seed_length)
+                            const unsigned char *seed)
 {
+  size_t seed_length = bits / 8;
   BIGNUM *r0=NULL,*r1=NULL,*r2=NULL,*r3=NULL,*tmp;
   BIGNUM local_r0,local_d,local_p;
   BIGNUM *pr0,*d,*p;
