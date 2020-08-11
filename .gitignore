@@ -1,2 +1,4 @@
 build
 sample
+.idea
+cmake-build-debug
