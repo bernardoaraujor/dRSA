@@ -3,6 +3,7 @@
 ![C/C++ CI](https://github.com/bernardoaraujor/dopenssl/workflows/C/C++%20CI/badge.svg)
 
 - [Intro](#intro)
+- [dOpenSSL for IOTA](#dopenssl-for-iota)
 - [Dependencies](#dependencies)
 - [Clone, Build, Install](#clone--build--install)
 - [Example](#example)
@@ -18,6 +19,14 @@ The dOpenSSL library extends the OpenSSL Project cryptographic library so as to 
 The OpenSSL random generator introduces entropy in many places, making it unusable in a deterministic way. Thus, some functions have been cloned and adapted in order to guarantee determinism.
 
 This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit.
+
+# dOpenSSL for IOTA
+[IOTA](https://iota.org) uses seeds as source of entropy for PNRGs and generate signing private keys in a deterministic way.
+
+This implementation of dOpenSSL aims to deterministically create SSL keypairs based on IOTA seeds.
+
+IOTA seeds are kept safe via [Hardware Security Modules (HSM)](https://en.wikipedia.org/wiki/Hardware_security_module) or [IOTA Stronghold](https://github.com/iotaledger/stronghold.rs.git).
+Private key representations only exist on RAM while the Access Authenticated SSL/TCP session exists. As soon as the socket is closed, private keys are destroyed.
 
 ## Dependencies
 The library relies upon the following libraries:
