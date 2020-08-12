@@ -55,14 +55,17 @@ The RSA seed is used to create the RSA private key, from which the public key is
 
 The bytesize of `rsa_seed` is given by the formula: `rsa_seed_len = rsa_bits / 8`. That means that `rsa_seed` is directly proportional to how many bits we choose for the RSA keypair.
 
-2048-bit RSA is ([recommended by NIST](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57Pt3r1.pdf)).
+2048-bit RSA is ([recommended by NIST](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57Pt3r1.pdf)), so `rsa_bits = 2048` is the only value IOTA2RSA supports.
 
 ### IOTA to RSA seed derivation
 
 The lengths of `iota_seed` and `rsa_seed` are always different.
 So the seed derivation algorithm consists of:
-- if `iota_seed_len > rsa_seed_len` then copy `iota_seed` into `rsa_seed` and truncate at `rsa_seed_len`.
-- if `iota_seed_len < rsa_seed_len` then copy `iota_seed` repeated times into `rsa_seed`, and truncate when arrive at `rsa_seed_len`.
+```
+for (i = 0; i < rsa_seed_len; i++) {
+  copy iota_seed[i % iota_seed_len] into rsa_seed[i]
+}
+```
 
 Assuming `rsa_bits = 2048`:
 
@@ -71,8 +74,6 @@ Assuming `rsa_bits = 2048`:
 
 - `rsa_seed = TTKSPEVMHM9HWVAXZMJO9HNPUPPUDKVHQNLUUMROTEAK9QTW9SHWNNJMXNCEILESRKCJHKQQHJBRJHWFNTTKSPEVMHM9HWVAXZMJO9HNPUPPUDKVHQNLUUMROTEAK9QTW9SHWNNJMXNCEILESRKCJHKQQHJBRJHWFNTTKSPEVMHM9HWVAXZMJO9HNPUPPUDKVHQNLUUMROTEAK9QTW9SHWNNJMXNCEILESRKCJHKQQHJBRJHWFNTTKSPEVMHM9HW`
 - `rsa_seed_len = 256`
-
-
 
 ## Dependencies
 The library relies upon the following libraries:
