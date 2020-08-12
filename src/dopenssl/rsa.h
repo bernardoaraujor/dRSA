@@ -14,6 +14,24 @@
 
 # include <openssl/rsa.h>
 
+/**
+ * @brief struct representation of rsa_seed
+ */
+typedef struct{
+    unsigned char* seed;
+    unsigned int seed_len;
+    unsigned int bits;
+} rsa_seed_t;
+
+/**
+ * @brief rsa_seed_t initializer
+ *
+ * @param rsa_seed pointer to rsa_seed_t
+ * @param rsa_bits rsa bits
+ * @return 0 for error, 1 for success
+ */
+int rsa_seed_init(rsa_seed_t **rsa_seed, unsigned int rsa_bits);
+
 /* Fill the public key of the given _rsa_ with the modulus _N_ and deduce the
    exponent with a deterministic PNRG seeded with the content provided. */
 RSA *dRSA_deduce_publickey(BIGNUM *N,

@@ -75,7 +75,7 @@ endif()
 set(IOTA2RSA_SRC_DIR "src/iota2rsa")
 set(IOTA2RSA_HEADERS ${IOTA2RSA_SRC_DIR}/iota2rsa.h)
 
-include_directories(${IOTA2RSA_SRC_DIR}/..)
+include_directories(${IOTA2RSA_SRC_DIR}/.. ${DOPENSSL_SRC_DIR})
 
 set(IOTA2RSA_SRC ${IOTA2RSA_SRC_DIR}/iota2rsa.c)
 

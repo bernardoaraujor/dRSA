@@ -7,27 +7,8 @@
 
 #include "iota2rsa/iota2rsa.h"
 
-int main(int argc, char **argv)
+int genrsa(RSA* rsa, unsigned int rsa_bits, unsigned char* rsa_seed)
 {
-  if (argc != 2)
-  {
-    printf("usage: %s [iota_seed]\n", argv[0]);
-    return(1);
-  }
-
-  unsigned char* iota_seed = argv[1];
-  unsigned int const length = strlen(iota_seed);
-  if(length != 81){
-    printf("[error] IOTA seeds are 81 chars long.\n");
-    return (1);
-  }
-
-  unsigned int const rsa_bits = 2048;
-  unsigned char* rsa_seed;
-
-  if (!seed_iota2rsa(iota_seed, rsa_seed, rsa_bits))
-      return 0;
-
   /* Initialize the deterministic random generator */
   if (dRAND_init() != 1)
   {
@@ -35,14 +16,31 @@ int main(int argc, char **argv)
     return (1);
   }
 
-  /* Generate the RSA key */
-  RSA* rsa = NULL;
-
   if ((rsa = dRSA_deduce_privatekey(rsa_bits, rsa_seed)) == NULL)
   {
     printf("[error] unable to generate the RSA key pair\n");
     return (1);
   }
+}
+
+int main(int argc, char **argv)
+{
+  unsigned char* const iota_seed = "DEJUXV9ZQMIEXTWJJHJPLAWMOEKGAYDNALKSMCLG9AGPR9LCKHMLNZVCRFNFEPMGOBOYYIKJNYWSAVPAI";
+  unsigned int const length = strlen(iota_seed);
+
+  rsa_seed_t *rsa_seed;
+  if (!rsa_seed_init(&rsa_seed, 2048)){
+      printf("error: rsa_seed not initialized");
+      return 0;
+  }
+
+  if (!seed_iota2rsa(iota_seed, &rsa_seed)){
+      printf("error: iota2rsa conversion unsuccessfull");
+  }
+      return 0;
+
+  RSA* rsa = NULL;
+  genrsa(rsa, rsa_seed->bits, rsa_seed->seed);
 
   /* Display the RSA components */
   RSA_print_fp(stdout, rsa, 0);

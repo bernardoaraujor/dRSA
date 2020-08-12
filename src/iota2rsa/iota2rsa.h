@@ -1,3 +1,6 @@
+#include "common/trinary/tryte.h"
+#include "rsa.h"
+
 /**
  * @brief convert iota_seed to rsa_seed
  *
@@ -16,4 +19,4 @@
  *
  * @return 0 for error, 1 for success
  */
-int seed_iota2rsa(unsigned char *iota_seed, unsigned char* rsa_seed, unsigned int rsa_bits);
+int seed_iota2rsa(tryte_t *iota_seed, rsa_seed_t **rsa_seed);

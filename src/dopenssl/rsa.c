@@ -19,6 +19,7 @@
 #include <openssl/rand.h>
 
 #include <stdio.h>
+#include <string.h>
 #include <assert.h>
 
 /*
@@ -28,6 +29,25 @@
  *
  *   crypto/rsa/rsa_gen.c
  */
+
+int rsa_seed_init(rsa_seed_t **rsa_seed, unsigned int bits){
+
+    /** check RSA values **/
+    if (bits != 2048){
+        printf("error: invalid rsa_bits");
+        return 0;
+    }
+
+    unsigned int const seed_len = bits / 8;
+    unsigned char seed[seed_len];
+
+    *rsa_seed = (rsa_seed_t*) malloc(sizeof(rsa_seed_t));
+    (*rsa_seed)->seed = seed;
+    (*rsa_seed)->seed_len = bits / 8;
+    (*rsa_seed)->bits = bits;
+
+    return 1;
+}
 
 RSA *dRSA_deduce_publickey(BIGNUM *N,
                            const unsigned char *seed, size_t seed_length)
