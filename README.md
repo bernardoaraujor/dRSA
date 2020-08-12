@@ -32,9 +32,13 @@ Due to historical reasons, the [IOTA protocol](https://iota.org) relies on seeds
 
 **IOTA 1.0** only supports the [Winternitz One-Time Signature](https://eprint.iacr.org/2011/191.pdf) (**W-OTS**) Scheme. This choice introduced the restriction of non-reusable addresses.
 
-**IOTA 1.5** supports the legacy W-OTS, plus the reusable [ed25519](https://eprint.iacr.org/2020/823.pdf), as proposed in this [RFC](https://github.com/Wollac/protocol-rfcs/blob/ed25519/text/0009-ed25519-signature-scheme/0009-ed25519-signature-scheme.md).
+**IOTA 1.5** supports the legacy W-OTS, the reusable [ed25519](https://eprint.iacr.org/2020/823.pdf) and [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) based seeds.
 
-**IOTA 2.0** introduces a layered message approach where **IOTA Access** establishes RSA-based keypairs.
+**IOTA 2.0** introduces a layered message approach where **IOTA Access** establishes RSA 2048 based keypairs that are generated deterministically from IOTA seeds (legacy + BIP39). The added benefits of this approach are:
+- Short RAM-lifespam of private keys.
+- [NIST FIPS PUB 800-131A](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf) compliant.
+- [OpenSSL 1.1.1](https://www.openssl.org/news/openssl-1.1.1-notes.html) compliant.
+- Integration with IOTA Digital Identity Ecosystem.
 
 ## IOTA2RSA
 
