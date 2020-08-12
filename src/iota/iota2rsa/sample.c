@@ -5,7 +5,7 @@
 #include <dopenssl/rsa.h>
 #include <dopenssl/rand.h>
 
-#include "iota2rsa/iota2rsa.h"
+#include "iota/iota2rsa/iota2rsa.h"
 
 int genrsa(RSA* rsa, unsigned int rsa_bits, unsigned char* rsa_seed)
 {

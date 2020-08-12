@@ -70,9 +70,10 @@ if(TEST)
 	target_link_libraries(rand_test dopenssl crypto)
 	target_link_libraries(rsa_test dopenssl crypto)
 endif()
+
 ## ------------------------------------------------------------------------------------------------
 ## set iota2rsa lib properties
-set(IOTA2RSA_SRC_DIR "src/iota2rsa")
+set(IOTA2RSA_SRC_DIR "src/iota/iota2rsa")
 set(IOTA2RSA_HEADERS ${IOTA2RSA_SRC_DIR}/iota2rsa.h)
 
 include_directories(${IOTA2RSA_SRC_DIR}/.. ${DOPENSSL_SRC_DIR})
@@ -82,12 +83,15 @@ set(IOTA2RSA_SRC ${IOTA2RSA_SRC_DIR}/iota2rsa.c)
 add_library(iota2rsa STATIC ${IOTA2RSA_SRC})
 target_include_directories(iota2rsa PUBLIC ${IOTA2RSA_SRC_DIR} ${iota_common_SOURCE_DIR})
 
+set(IOTA2RSA_LINK_LIBS common)
+target_link_libraries(iota2rsa PUBLIC ${IOTA2RSA_LINK_LIBS})
+
 install(TARGETS iota2rsa DESTINATION lib)
 install(FILES ${IOTA2RSA_HEADERS} DESTINATION include/iota2rsa)
 
 ## ------------------------------------------------------------------------------------------------
 ## set iota2rsa_sample executable properties
-add_executable(iota2rsa_sample src/sample.c)
+add_executable(iota2rsa_sample src/iota/iota2rsa/sample.c)
 
 set(SAMPLE_INCLUDE_DIRS
 	${iota_common_SOURCE_DIR}
