@@ -25,7 +25,7 @@ int main(int argc, char **argv)
   unsigned int const rsa_bits = 2048;
   unsigned char* rsa_seed;
 
-  if (!iota2rsa(iota_seed, rsa_seed, rsa_bits))
+  if (!seed_iota2rsa(iota_seed, rsa_seed, rsa_bits))
       return 0;
 
   /* Initialize the deterministic random generator */

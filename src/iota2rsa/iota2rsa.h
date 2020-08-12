@@ -16,4 +16,4 @@
  *
  * @return 0 for error, 1 for success
  */
-int iota2rsa(unsigned char *iota_seed, unsigned char* rsa_seed, unsigned int rsa_bits);
+int seed_iota2rsa(unsigned char *iota_seed, unsigned char* rsa_seed, unsigned int rsa_bits);
