@@ -19,4 +19,4 @@
  *
  * @return 0 for error, 1 for success
  */
-int seed_iota2rsa(tryte_t *iota_seed, rsa_seed_t **rsa_seed);
+int iota2rsa_set_rsa_seed(tryte_t *iota_seed, rsa_seed_t *rsa_seed);

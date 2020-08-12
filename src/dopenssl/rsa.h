@@ -30,7 +30,14 @@ typedef struct{
  * @param rsa_bits rsa bits
  * @return 0 for error, 1 for success
  */
-int rsa_seed_init(rsa_seed_t **rsa_seed, unsigned int rsa_bits);
+int rsa_seed_init(rsa_seed_t *rsa_seed, unsigned int rsa_bits);
+
+/**
+ * @brief rsa_seed_t destroyer
+ * @param rsa_seed  pointer to rsa_seed_t
+ * @return 0 for error, 1 for success
+ */
+int rsa_seed_destroy(rsa_seed_t *rsa_seed);
 
 /* Fill the public key of the given _rsa_ with the modulus _N_ and deduce the
    exponent with a deterministic PNRG seeded with the content provided. */

@@ -30,7 +30,7 @@
  *   crypto/rsa/rsa_gen.c
  */
 
-int rsa_seed_init(rsa_seed_t **rsa_seed, unsigned int bits){
+int rsa_seed_init(rsa_seed_t *rsa_seed, unsigned int bits){
 
     /** check RSA values **/
     if (bits != 2048){
@@ -41,10 +41,21 @@ int rsa_seed_init(rsa_seed_t **rsa_seed, unsigned int bits){
     unsigned int const seed_len = bits / 8;
     unsigned char seed[seed_len];
 
-    *rsa_seed = (rsa_seed_t*) malloc(sizeof(rsa_seed_t));
-    (*rsa_seed)->seed = seed;
-    (*rsa_seed)->seed_len = bits / 8;
-    (*rsa_seed)->bits = bits;
+    rsa_seed_t *ret;
+    ret = (rsa_seed_t*) malloc(sizeof(rsa_seed_t));
+    ret->seed = (unsigned char*) malloc(seed_len * sizeof(unsigned char));
+    ret->seed_len = bits / 8;
+    ret->bits = bits;
+
+    *rsa_seed = *ret;
+
+    return 1;
+}
+
+int rsa_seed_destroy(rsa_seed_t *rsa_seed){
+    (*rsa_seed).seed = NULL;
+    (*rsa_seed).seed_len = NULL;
+    (*rsa_seed).bits = NULL;
 
     return 1;
 }
