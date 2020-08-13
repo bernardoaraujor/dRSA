@@ -19,8 +19,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-/** RSA Seed Generation **/
-
 /** RSA Key Generation **/
 
 static void _test_encrypt(EVP_PKEY* key,
@@ -155,7 +153,7 @@ static void test_deduce()
   assert(dRAND_init() == 1);
 
   // Original key.
-  EVP_PKEY* key = _test_generate(1024);
+  EVP_PKEY* key = _test_generate(2048);
   assert(key != NULL);
 
   RSA* original = key->pkey.rsa;
@@ -372,13 +370,28 @@ static void test_rotate_and_derive()
   EVP_PKEY_free(key);
 
   assert(dRAND_clean() == 1);
+
+  printf("test_rotate_and_derive success\n");
+}
+
+/** RSA Seed Generation **/
+static void test_rsa_seed(){
+    rsa_seed_t rsa_seed;
+    int bits = 2048;
+
+    assert(rsa_seed_init(&rsa_seed, bits));
+    assert(rsa_seed.bits == bits);
+    assert(rsa_seed.seed_len == bits / 8);
+
+    printf("test_rsa_seed success\n");
 }
 
 /** Main **/
 
 int main(int argc, char** argv) {
-  test_deduce();
+  // test_deduce();
   test_rotate_and_derive();
+  test_rsa_seed();
 
   return (0);
 }

@@ -7,7 +7,7 @@ project(dopenssl DESCRIPTION "A deterministic implementation of some of the Open
 enable_language(C)
 enable_testing()
 
-option(TEST "Enable tests" OFF)
+option(TEST "Enable tests" ON)
 
 ## ------------------------------------------------------------------------------------------------
 ## fetch ExternalProjects
@@ -29,6 +29,9 @@ FetchContent_Declare(
 
 message(STATUS "Fetching iota_common")
 FetchContent_MakeAvailable(iota_common)
+
+message(STATUS "Removing old ${CMAKE_INSTALL_PREFIX}/trezor-firmware")
+file(REMOVE ${CMAKE_INSTALL_PREFIX}/trezor-firmware)
 
 message(STATUS "Fetching trezor-firmware")
 FetchContent_MakeAvailable(trezor-firmware)
