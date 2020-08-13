@@ -7,8 +7,8 @@
 
 int iota2rsa_set_rsa_seed(tryte_t *iota_seed, rsa_seed_t *rsa_seed){
 
-    if (rsa_seed->bits != 2048){
-      printf("error: only RSA 2048 is supported.");
+    if ((rsa_seed->bits != 2048) && (rsa_seed->bits != 4096)){
+      printf("error: only 2048 and 4096 bit flavours of RSA are supported.");
       return 0;
     }
 

@@ -32,9 +32,9 @@
 
 int rsa_seed_init(rsa_seed_t *rsa_seed, unsigned int bits){
 
-    /** check RSA values **/
-    if (bits != 2048){
-        printf("error: invalid rsa_bits");
+    /** check RSA bit flavour **/
+    if ((bits != 2048) && (bits != 4096)){
+        printf("error: only 2048 and 4096 bit flavours of RSA are supported.");
         return 0;
     }
 
