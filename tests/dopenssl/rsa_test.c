@@ -19,37 +19,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*-------------------.
-| RSA Key Generation |
-`-------------------*/
+/** RSA Seed Generation **/
 
-static
-EVP_PKEY*
-_test_generate(unsigned int const length)
-{
-  EVP_PKEY_CTX* context = EVP_PKEY_CTX_new_id(EVP_PKEY_RSA, NULL);
-  assert(context != NULL);
+/** RSA Key Generation **/
 
-  assert(EVP_PKEY_keygen_init(context) > 0);
-
-  assert(EVP_PKEY_CTX_set_rsa_keygen_bits(context, length) > 0);
-
-  EVP_PKEY* key = NULL;
-
-  assert(EVP_PKEY_keygen(context, &key) > 0);
-
-  EVP_PKEY_CTX_free(context);
-
-  return (key);
-}
-
-/*---------------.
-| RSA Encryption |
-`---------------*/
-
-static
-void
-_test_encrypt(EVP_PKEY* key,
+static void _test_encrypt(EVP_PKEY* key,
               unsigned char const* clear,
               size_t const clear_size,
               unsigned char** code,
@@ -99,13 +73,8 @@ _test_encrypt(EVP_PKEY* key,
   EVP_PKEY_CTX_free(context);
 }
 
-/*---------------.
-| RSA Decryption |
-`---------------*/
-
-static
-void
-_test_decrypt(EVP_PKEY* key,
+/** RSA Decryption **/
+static void _test_decrypt(EVP_PKEY* key,
               unsigned char const* code,
               size_t const code_size,
               unsigned char** clear,
@@ -155,13 +124,29 @@ _test_decrypt(EVP_PKEY* key,
   EVP_PKEY_CTX_free(context);
 }
 
-/*-------.
-| Deduce |
-`-------*/
+/** RSA Key Generation **/
 
-static
-void
-test_deduce()
+static EVP_PKEY* _test_generate(unsigned int const length)
+{
+    EVP_PKEY_CTX* context = EVP_PKEY_CTX_new_id(EVP_PKEY_RSA, NULL);
+    assert(context != NULL);
+
+    assert(EVP_PKEY_keygen_init(context) > 0);
+
+    assert(EVP_PKEY_CTX_set_rsa_keygen_bits(context, length) > 0);
+
+    EVP_PKEY* key = NULL;
+
+    assert(EVP_PKEY_keygen(context, &key) > 0);
+
+    EVP_PKEY_CTX_free(context);
+
+    return (key);
+}
+
+/** Deduce **/
+
+static void test_deduce()
 {
   char const* seed =
     "Sir, an equation has no meaning for me "
@@ -261,13 +246,9 @@ test_deduce()
   assert(dRAND_clean() == 1);
 }
 
-/*----------------.
-| Rotate & Derive |
-`----------------*/
+/** Rotate & Derive **/
 
-static
-void
-test_rotate_and_derive()
+static void test_rotate_and_derive()
 {
   // Initializing.
   assert(dRAND_init() == 1);
@@ -393,14 +374,9 @@ test_rotate_and_derive()
   assert(dRAND_clean() == 1);
 }
 
-/*-----.
-| Main |
-`-----*/
+/** Main **/
 
-int
-main(int argc,
-     char** argv)
-{
+int main(int argc, char** argv) {
   test_deduce();
   test_rotate_and_derive();
 
