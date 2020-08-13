@@ -24,6 +24,7 @@ FetchContent_Declare(
 		trezor-firmware
 		GIT_REPOSITORY https://github.com/bernardoaraujor/trezor-firmware.git
 		GIT_TAG 0b3c205da877634eb348fe9dc11c7e9066f33b6f
+		GIT_SUBMODULES_RECURSE 1
 )
 
 message(STATUS "Fetching iota_common")
@@ -66,21 +67,6 @@ target_include_directories(dopenssl PUBLIC
 
 install(TARGETS dopenssl DESTINATION lib)
 install(FILES ${DOPENSSL_HEADERS} DESTINATION include/dopenssl)
-
-if(TEST)
-	set(TEST_DIR "tests/dopenssl")
-	add_executable(bn_test ${TEST_DIR}/bn.c)
-	add_executable(rand_test ${TEST_DIR}/rand.c)
-	add_executable(rs_testa ${TEST_DIR}/rsa.c)
-
-	target_include_directories(bn_test PRIVATE ${TEST_DIR})
-	target_include_directories(rand_test PRIVATE ${TEST_DIR})
-	target_include_directories(rsa_test PRIVATE ${TEST_DIR})
-
-	target_link_libraries(bn_test dopenssl crypto)
-	target_link_libraries(rand_test dopenssl crypto)
-	target_link_libraries(rsa_test dopenssl crypto)
-endif()
 
 ## ------------------------------------------------------------------------------------------------
 ## set iota2rsa lib properties
@@ -125,3 +111,30 @@ set(SAMPLE_LINK_LIBS
 target_link_libraries(iota2rsa_sample PUBLIC ${SAMPLE_LINK_LIBS})
 
 install(TARGETS iota2rsa_sample DESTINATION bin)
+
+## ------------------------------------------------------------------------------------------------
+## set tests
+
+if(TEST)
+	set(DOPENSSL_TEST_DIR "tests/dopenssl")
+	set(IOTA2RSA_TEST_DIR "tests/iota/iota2rsa")
+
+	add_executable(bn_test ${DOPENSSL_TEST_DIR}/bn_test.c)
+	add_executable(rand_test ${DOPENSSL_TEST_DIR}/rand_test.c)
+	add_executable(rsa_test ${DOPENSSL_TEST_DIR}/rsa_test.c)
+	add_executable(iota2rsa_test ${IOTA2RSA_TEST_DIR}/iota2rsa_test.c tests/iota/iota2rsa/iota2rsa_test.h)
+
+	target_include_directories(bn_test PRIVATE ${DOPENSSL_TEST_DIR})
+	target_include_directories(rand_test PRIVATE ${DOPENSSL_TEST_DIR})
+	target_include_directories(rsa_test PRIVATE ${DOPENSSL_TEST_DIR})
+	target_include_directories(iota2rsa_test PRIVATE ${IOTA2RSA_TEST_DIR})
+
+	target_link_directories(iota2rsa_test PUBLIC ${CMAKE_INSTALL_PREFIX})
+
+	target_link_libraries(bn_test dopenssl crypto)
+	target_link_libraries(rand_test dopenssl crypto)
+	target_link_libraries(rsa_test dopenssl crypto)
+	target_link_libraries(iota2rsa_test dopenssl crypto)
+
+
+endif()
