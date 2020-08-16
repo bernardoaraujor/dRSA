@@ -3,11 +3,6 @@
 ![C/C++ CI](https://github.com/bernardoaraujor/dopenssl/workflows/C/C++%20CI/badge.svg)
 
 * [Intro](#intro)
-* [dOpenSSL for IOTA](#dopenssl-for-iota)
-  + [IOTA2RSA](#iota2rsa)
-    - [IOTA seed](#iota-seed)
-    - [RSA seed](#rsa-seed)
-    - [IOTA to RSA seed derivation](#iota-to-rsa-seed-derivation)
 * [Dependencies](#dependencies)
 * [Clone, Build](#clone--build)
 * [Example](#example)
@@ -18,66 +13,9 @@
 
 **Disclaimer:** This is the continuation of the [original implementation](https://github.com/infinit/dopenssl) by [Infinit](https://infinit.sh/). [Drake](https://github.com/infinit/drake) has been replaced by [CMake](https://cmake.org/) as default build system.
 
-The dOpenSSL library extends the OpenSSL Project cryptographic library so as to provide deterministic random generation functionalities. Basically, dOpenSSL guarantees that should a big number or a cryptographic key be generated, given a PRNG's state, the result would be always the same.
+The dRSA library extends the OpenSSL RSA library so as to provide deterministic keypair generation. Basically, dRSA guarantees that should a cryptographic key be generated, given a PRNG's state, the result would be always the same.
 
 The OpenSSL random generator introduces entropy in many places, making it unusable in a deterministic way. Thus, some functions have been cloned and adapted in order to guarantee determinism.
-
-The `libdopenssl` API allows deterministic generation of:
-- [Big Number](https://www.openssl.org/docs/man1.0.2/man3/bn.html) (**BN**)
-- [Pseudo-Random Number](https://www.openssl.org/docs/man1.0.2/man3/rand.html) (**PRNG**)
-- [Rivest–Shamir–Adleman](https://www.openssl.org/docs/man1.0.2/man1/openssl-rsa.html) (**RSA**) keypairs
-
-# dOpenSSL for IOTA
-Due to historical reasons, the [IOTA protocol](https://iota.org) relies on seeds to generate signing keys in a deterministic way.
-
-- **IOTA 1.0** only supports the [Winternitz One-Time Signature](https://eprint.iacr.org/2011/191.pdf) (**W-OTS**) Scheme. This choice introduced the restriction of non-reusable addresses.
-- **IOTA 1.5** supports the legacy W-OTS, the reusable [ed25519](https://eprint.iacr.org/2020/823.pdf) and [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) based seeds.
-- **IOTA 2.0** introduces a layered message approach where **IOTA Access** establishes RSA 2048 based keypairs that are generated deterministically from IOTA seeds (legacy + BIP39).
-
-The added benefits of this approach are:
-- Short RAM-lifespam of private keys.
-- [NIST FIPS PUB 800-131A](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf) compliant.
-- [OpenSSL 1.1.1](https://www.openssl.org/news/openssl-1.1.1-notes.html) compliant.
-- Integration with IOTA Digital Identity Ecosystem.
-
-## IOTA2RSA
-
-The `libiota2rsa` API allows to create a RSA keypair starting from an IOTA seed.
-
-### IOTA seed
-The IOTA seed is composed of 81 trytes. Trytes can be mapped into an ASCII character in the [Tryte Encoding Scheme](https://docs.iota.org/docs/getting-started/0.1/introduction/ternary), which means we can think of an IOTA seed as something like this string:
-
-```
-TTKSPEVMHM9HWVAXZMJO9HNPUPPUDKVHQNLUUMROTEAK9QTW9SHWNNJMXNCEILESRKCJHKQQHJBRJHWFN
-```
-
-IOTA seeds are kept safe via [Hardware Security Modules (HSM)](https://en.wikipedia.org/wiki/Hardware_security_module) or [IOTA Stronghold](https://github.com/iotaledger/stronghold.rs.git).
-
-### RSA seed
-
-The RSA seed is used to create the RSA private key, from which the public key is derived.
-
-The bytesize of `rsa_seed` is given by the formula: `rsa_seed_len = rsa_bits / 8`. That means that `rsa_seed` is directly proportional to how many bits we choose for the RSA keypair.
-
-2048-bit RSA is [recommended by NIST](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57Pt3r1.pdf), so IOTA2RSA only supports 2048 and 4096 flavours of RSA.
-
-### IOTA to RSA seed derivation
-
-The lengths of `iota_seed` and `rsa_seed` are always different.
-So the seed derivation algorithm consists of:
-```
-for (i = 0; i < rsa_seed_len; i++) {
-  copy iota_seed[i % iota_seed_len] into rsa_seed[i]
-}
-```
-
-Assuming `rsa_bits = 2048`:
-
-- `iota_seed = TTKSPEVMHM9HWVAXZMJO9HNPUPPUDKVHQNLUUMROTEAK9QTW9SHWNNJMXNCEILESRKCJHKQQHJBRJHWFN`
-- `iota_seed_len = 81`
-
-- `rsa_seed = TTKSPEVMHM9HWVAXZMJO9HNPUPPUDKVHQNLUUMROTEAK9QTW9SHWNNJMXNCEILESRKCJHKQQHJBRJHWFNTTKSPEVMHM9HWVAXZMJO9HNPUPPUDKVHQNLUUMROTEAK9QTW9SHWNNJMXNCEILESRKCJHKQQHJBRJHWFNTTKSPEVMHM9HWVAXZMJO9HNPUPPUDKVHQNLUUMROTEAK9QTW9SHWNNJMXNCEILESRKCJHKQQHJBRJHWFNTTKSPEVMHM9HW`
-- `rsa_seed_len = 256`
 
 ## Dependencies
 The library relies upon the following libraries:
