@@ -9,8 +9,8 @@
  * conditions.
  */
 
-#include <dopenssl/bn.h>
-#include <dopenssl/rand.h>
+#include "bn.h"
+#include "rand.h"
 
 #include <openssl/rand.h>
 #include <openssl/err.h>

@@ -9,9 +9,9 @@
  * conditions.
  */
 
-#include <dopenssl/rsa.h>
-#include <dopenssl/rand.h>
-#include <dopenssl/bn.h>
+#include "rsa.h"
+#include "rand.h"
+#include "bn.h"
 
 #include <openssl/rsa.h>
 #include <openssl/err.h>

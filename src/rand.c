@@ -9,7 +9,7 @@
  * conditions.
  */
 
-#include <dopenssl/rand.h>
+#include "rand.h"
 
 #include <openssl/evp.h>
 #include <openssl/sha.h>

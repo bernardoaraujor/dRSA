@@ -26,14 +26,15 @@ The library relies upon the following libraries:
 $ sudo apt-get install libssl1.0-dev -y
 ```
 
-## Clone, Build, Install
+## Clone, Build, Run
 Assuming you're on Ubuntu 18.04:
 
 ```
 $ git clone http://github.com/bernardoaraujor/dopenssl.git
 $ cd dopenssl
-$ cmake .. cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/ext_install; make
-$ sudo make install
+$ mkdir build; cd build
+$ cmake ..; make
+$ ./sample
 ```
 
 ## Example
