@@ -1,6 +1,6 @@
-# dOpenSSL
+# dRSA
 
-![C/C++ CI](https://github.com/bernardoaraujor/dopenssl/workflows/C/C++%20CI/badge.svg)
+![C/C++ CI](https://github.com/bernardoaraujor/dRSA/workflows/C/C++%20CI/badge.svg)
 
 * [Intro](#intro)
 * [Dependencies](#dependencies)
@@ -13,7 +13,7 @@
 
 **Disclaimer:** This is the continuation of the [original implementation](https://github.com/infinit/dopenssl) by [Infinit](https://infinit.sh/). [Drake](https://github.com/infinit/drake) has been replaced by [CMake](https://cmake.org/) as default build system.
 
-The dRSA library extends the OpenSSL RSA library so as to provide deterministic keypair generation. Basically, dRSA guarantees that should a cryptographic key be generated, given a PRNG's state, the result would be always the same.
+The dRSA library extends the OpenSSL RSA implementation so as to provide deterministic keypair generation. Basically, dRSA guarantees that should a cryptographic key be generated, given a PRNG's state, the result would be always the same.
 
 The OpenSSL random generator introduces entropy in many places, making it unusable in a deterministic way. Thus, some functions have been cloned and adapted in order to guarantee determinism.
 
